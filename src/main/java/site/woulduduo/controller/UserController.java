@@ -580,5 +580,12 @@ public class UserController {
         return ResponseEntity.ok(userInfo);
     }
 
+    @PatchMapping("/api/v1/users/refresh/{userAccount}")
+    public ResponseEntity<?> refreshUserHistory(@PathVariable String userAccount) {
+        boolean result = userService.refreshUserHistory(userAccount);
+
+        return  ResponseEntity.ok(result);
+    }
+
 }
 

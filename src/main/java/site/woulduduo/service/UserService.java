@@ -94,7 +94,10 @@ public class UserService {
             try {
                 rankInfo = riotApiService.getRankInfo(lolNickname, "RANKED_FLEX_SR");
             } catch (NoRankException ex) {
-                rankInfo = LeagueV4DTO.builder().build();
+                rankInfo = LeagueV4DTO.builder()
+                        .tier("UNR")
+                        .rank("")
+                        .build();
             }
         }
 
@@ -380,90 +383,7 @@ public class UserService {
             userRepository.save(u);
 
             // 20게임 정보 저장
-            for (int i = 0; i < last20ParticipantDTOList.size(); i++) {
-                MatchV5DTO.MatchInfo.ParticipantDTO participantDTO = last20ParticipantDTOList.get(i);
-
-                int kills = participantDTO.getKills();
-                int deaths = participantDTO.getDeaths();
-                int assists = participantDTO.getAssists();
-                recentMatchRepository.save(RecentMatch.builder()
-                        .user(u)
-                        .recentNo(i + 1)
-                        .championName(participantDTO.getChampionName())
-                        .kills(kills)
-                        .deaths(deaths)
-                        .assists(assists)
-                        .item0(participantDTO.getItem0())
-                        .item1(participantDTO.getItem1())
-                        .item2(participantDTO.getItem2())
-                        .item3(participantDTO.getItem3())
-                        .item4(participantDTO.getItem4())
-                        .item5(participantDTO.getItem5())
-                        .item6(participantDTO.getItem6())
-                        .mainPerk(participantDTO.getPerks().getStyles()[0].getSelections()[0].getPerk())
-                        .subPerk(participantDTO.getPerks().getStyles()[1].getStyle())
-                        .summoner1Id(participantDTO.getSummoner1Id())
-                        .summoner2Id(participantDTO.getSummoner2Id())
-                        .win(participantDTO.isWin())
-                        .avgKda(String.format("%.2f", ((double) kills + assists / deaths)))
-                        .build());
-            }
-
-            // 20 게임 미만일 경우
-            for (int i = last20ParticipantDTOList.size(); i < 20; i++) {
-                recentMatchRepository.save(RecentMatch.builder()
-                        .user(u)
-                        .recentNo(i + 1)
-                        .build());
-            }
-
-            // 모스트 챔피언 3개 또는 그 이하 저장
-            List<String> most3Champions = riotApiService.getMost3Champions(last20ParticipantDTOList);
-
-            for (int i = 0; i < 3; i++) {
-                String champName = null;
-                int winCount = 0;
-                int loseCount = 0;
-                double kda = 0;
-                try {
-                    champName = most3Champions.get(i);
-
-                    String finalChampName = champName;
-                    List<MatchV5DTO.MatchInfo.ParticipantDTO> champMatchInfo = last20ParticipantDTOList.stream()
-                            .filter(p -> p.getChampionName().equals(finalChampName))
-                            .collect(toList());
-
-                    winCount = (int) champMatchInfo.stream()
-                            .filter(MatchV5DTO.MatchInfo.ParticipantDTO::isWin).count();
-
-                    loseCount = champMatchInfo.size() - winCount;
-
-                    // stream을 한번에 돌려서 필요한 정보들을 같이 가져오는 (ex 배열에 담던가 객체를 하나 만들어서) 방법으로
-                    // 리팩토링 가능
-                    int kills = champMatchInfo.stream()
-                            .mapToInt(MatchV5DTO.MatchInfo.ParticipantDTO::getKills).sum();
-
-                    int deaths = champMatchInfo.stream()
-                            .mapToInt(MatchV5DTO.MatchInfo.ParticipantDTO::getDeaths).sum();
-
-                    int assists = champMatchInfo.stream()
-                            .mapToInt(MatchV5DTO.MatchInfo.ParticipantDTO::getAssists).sum();
-
-                    kda = (double) (kills + assists) / deaths;
-
-                } catch (IndexOutOfBoundsException e) {
-                    champName = "";
-                }
-
-                mostChampRepository.save(MostChamp.builder()
-                        .user(u)
-                        .mostNo(i + 1)
-                        .champName(champName)
-                        .champWinCount(winCount)
-                        .champLoseCount(loseCount)
-                        .champKda(kda)
-                        .build());
-            }
+            saveHistoryInfo(last20ParticipantDTOList, u);
 
         });
 
@@ -946,5 +866,120 @@ public class UserService {
                 .lolNickname(user.getLolNickname())
                 .build();
 
+    }
+
+    public boolean refreshUserHistory(String userAccount) {
+
+        User user = userRepository.findByUserAccount(userAccount);
+
+        deleteExistingHistoryInfo(userAccount);
+
+        List<MatchV5DTO.MatchInfo.ParticipantDTO> last20ParticipantDTOList = riotApiService.getLast20ParticipantDTOList(user.getLolNickname());
+
+        saveHistoryInfo(last20ParticipantDTOList, user);
+
+        return true;
+
+    }
+
+    private void saveHistoryInfo(List<MatchV5DTO.MatchInfo.ParticipantDTO> last20ParticipantDTOList, User user) {
+
+        // 20게임 정보 저장
+        for (int i = 0; i < last20ParticipantDTOList.size(); i++) {
+            MatchV5DTO.MatchInfo.ParticipantDTO participantDTO = last20ParticipantDTOList.get(i);
+
+            int kills = participantDTO.getKills();
+            int deaths = participantDTO.getDeaths();
+            int assists = participantDTO.getAssists();
+            String avgKda = null;
+            try {
+                avgKda = String.format("%.2f", ((double) kills + assists / deaths));
+            } catch (ArithmeticException e) {
+                avgKda = "P";
+            }
+            recentMatchRepository.save(RecentMatch.builder()
+                    .user(user)
+                    .recentNo(i + 1)
+                    .championName(participantDTO.getChampionName())
+                    .kills(kills)
+                    .deaths(deaths)
+                    .assists(assists)
+                    .item0(participantDTO.getItem0())
+                    .item1(participantDTO.getItem1())
+                    .item2(participantDTO.getItem2())
+                    .item3(participantDTO.getItem3())
+                    .item4(participantDTO.getItem4())
+                    .item5(participantDTO.getItem5())
+                    .item6(participantDTO.getItem6())
+                    .mainPerk(participantDTO.getPerks().getStyles()[0].getSelections()[0].getPerk())
+                    .subPerk(participantDTO.getPerks().getStyles()[1].getStyle())
+                    .summoner1Id(participantDTO.getSummoner1Id())
+                    .summoner2Id(participantDTO.getSummoner2Id())
+                    .win(participantDTO.isWin())
+                    .avgKda(avgKda)
+                    .build());
+        }
+
+        // 20 게임 미만일 경우
+        for (int i = last20ParticipantDTOList.size(); i < 20; i++) {
+            recentMatchRepository.save(RecentMatch.builder()
+                    .user(user)
+                    .recentNo(i + 1)
+                    .build());
+        }
+
+        // 모스트 챔피언 3개 또는 그 이하 저장
+        List<String> most3Champions = riotApiService.getMost3Champions(last20ParticipantDTOList);
+
+        for (int i = 0; i < 3; i++) {
+            String champName = null;
+            int winCount = 0;
+            int loseCount = 0;
+            double kda = 0;
+            try {
+                champName = most3Champions.get(i);
+
+                String finalChampName = champName;
+                List<MatchV5DTO.MatchInfo.ParticipantDTO> champMatchInfo = last20ParticipantDTOList.stream()
+                        .filter(p -> p.getChampionName().equals(finalChampName))
+                        .collect(toList());
+
+                winCount = (int) champMatchInfo.stream()
+                        .filter(MatchV5DTO.MatchInfo.ParticipantDTO::isWin).count();
+
+                loseCount = champMatchInfo.size() - winCount;
+
+                // stream을 한번에 돌려서 필요한 정보들을 같이 가져오는 (ex 배열에 담던가 객체를 하나 만들어서) 방법으로
+                // 리팩토링 가능
+                int kills = champMatchInfo.stream()
+                        .mapToInt(MatchV5DTO.MatchInfo.ParticipantDTO::getKills).sum();
+
+                int deaths = champMatchInfo.stream()
+                        .mapToInt(MatchV5DTO.MatchInfo.ParticipantDTO::getDeaths).sum();
+
+                int assists = champMatchInfo.stream()
+                        .mapToInt(MatchV5DTO.MatchInfo.ParticipantDTO::getAssists).sum();
+
+                kda = (double) (kills + assists) / deaths;
+
+            } catch (IndexOutOfBoundsException e) {
+                champName = "";
+            }
+
+            mostChampRepository.save(MostChamp.builder()
+                    .user(user)
+                    .mostNo(i + 1)
+                    .champName(champName)
+                    .champWinCount(winCount)
+                    .champLoseCount(loseCount)
+                    .champKda(kda)
+                    .build());
+        }
+    }
+
+    private void deleteExistingHistoryInfo(String userAccount) {
+        // 존재하고 있는 데이터를 모두 비워줌
+        recentMatchRepository.deleteAllByUserAccount(userAccount);
+        mostChampRepository.deleteAllByUserAccount(userAccount);
     }
 }

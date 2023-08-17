@@ -8,10 +8,11 @@
 
 ## Would U Duo : Find League of Legend Duo Player v1.1
 
-> 중앙정보처리학원 데이터융합 자바(JAVA) 응용 SW개발자 취업과정 1조
-> 풀 스택 개발 학습
-> 개발기간 : 2023.05.30 ~ 2023.07.04 (v1.0)
->                     ~ 2023.07.11 (v1.1) : 전적 정보 데이터베이스에 저장
+> 중앙정보처리학원 데이터융합 자바(JAVA) 응용 SW개발자 취업과정 1조 <br>
+> 풀 스택 개발 학습 <br>
+> 개발기간 : 2023.05.30 ~ 2023.07.04 (v1.0) <br>
+>                     ~ 2023.07.11 (v1.1) : 전적 정보 데이터베이스에 저장 <br>
+>                     ~ 2023.08.05 (v1.2) : 전적 정보 갱신 요청 처리
 
 ## About Team
 
@@ -205,7 +206,7 @@
 
 ## About Project
 
-![img.png](img.png)
+![img.png](readme-assets/img.png)
 
 함께 즐거운 게임 플레이를 하고 싶은 사람들을 위한 웹사이트입니다.
 
@@ -267,3 +268,300 @@
 
 ### Main Page
 
+![img_1.png](readme-assets%2Fimg_1.png)
+
+### My Page - 내 정보 확인 및 변경
+
+![img.png](readme-assets/img_2.png)
+
+### My Page - 듀오 프로필 등록 및 수정
+
+![img.png](readme-assets/img_3.png)
+
+### My Page - 매칭 내역 확인
+
+![img.png](readme-assets/img_4.png)
+
+### History Page
+
+![img.png](readme-assets/img_5.png)
+
+### Sign Up Page
+
+![img.png](readme-assets/img_6.png)
+
+### Chatting Modal
+
+<div align="center">
+
+![img_7.png](readme-assets%2Fimg_7.png)
+<br>
+![img_8.png](readme-assets%2Fimg_8.png)
+
+</div>
+
+### Admin Page - Main
+
+![img.png](readme-assets/img_9.png)
+
+### Admin Page - Detail
+
+![img.png](readme-assets/img_10.png)
+
+### Admin Page - Accuse Modal
+
+![img_1.png](readme-assets/img_11.png)
+
+### Community - Board Register
+
+![img_2.png](readme-assets/img_12.png)
+
+## Structure
+
+```
+├─.gradle
+│  ├─7.6.1
+│  │  ├─checksums
+│  │  ├─dependencies-accessors
+│  │  ├─executionHistory
+│  │  ├─fileChanges
+│  │  ├─fileHashes
+│  │  └─vcsMetadata
+│  ├─buildOutputCleanup
+│  └─vcs-1
+├─.idea
+│  ├─dataSources
+│  │  ├─60e32876-ec6b-4081-a028-3b75ef9f7597
+│  │  │  └─storage_v2
+│  │  │      └─_src_
+│  │  │          └─schema
+│  │  └─f30bda4e-63d7-4667-8eb8-1faa35ee3da1
+│  │      └─storage_v2
+│  │          └─_src_
+│  │              └─schema
+│  └─modules
+├─build
+│  ├─classes
+│  │  └─java
+│  │      └─main
+│  │          └─site
+│  │              └─woulduduo
+│  │                  ├─api
+│  │                  ├─aws
+│  │                  ├─config
+│  │                  ├─controller
+│  │                  ├─dto
+│  │                  │  ├─request
+│  │                  │  │  ├─accuse
+│  │                  │  │  ├─board
+│  │                  │  │  ├─chatting
+│  │                  │  │  ├─login
+│  │                  │  │  ├─matching
+│  │                  │  │  ├─page
+│  │                  │  │  ├─profile
+│  │                  │  │  └─user
+│  │                  │  ├─response
+│  │                  │  │  ├─accuse
+│  │                  │  │  ├─board
+│  │                  │  │  ├─chatting
+│  │                  │  │  ├─login
+│  │                  │  │  ├─page
+│  │                  │  │  ├─profile
+│  │                  │  │  └─user
+│  │                  │  └─riot
+│  │                  ├─entity
+│  │                  ├─enumeration
+│  │                  ├─exception
+│  │                  ├─interceptor
+│  │                  ├─repository
+│  │                  ├─service
+│  │                  └─util
+│  │                      └─upload
+│  ├─generated
+│  │  └─sources
+│  │      ├─annotationProcessor
+│  │      │  └─java
+│  │      │      └─main
+│  │      │          └─site
+│  │      │              └─woulduduo
+│  │      │                  └─entity
+│  │      └─headers
+│  │          └─java
+│  │              └─main
+│  ├─resources
+│  │  └─main
+│  │      └─static
+│  │          └─assets
+│  │              ├─css
+│  │              │  ├─ad
+│  │              │  ├─admin
+│  │              │  ├─board
+│  │              │  ├─chatting
+│  │              │  ├─common
+│  │              │  ├─error
+│  │              │  ├─my-page
+│  │              │  ├─point
+│  │              │  ├─review
+│  │              │  └─user
+│  │              │      └─history
+│  │              ├─img
+│  │              │  ├─admin
+│  │              │  ├─chattingModal
+│  │              │  ├─community
+│  │              │  ├─header
+│  │              │  ├─main
+│  │              │  ├─mypage
+│  │              │  ├─pointStation
+│  │              │  ├─sign-up
+│  │              │  └─user-history
+│  │              │      ├─champions
+│  │              │      ├─item
+│  │              │      ├─rune
+│  │              │      │  ├─main
+│  │              │      │  └─sub
+│  │              │      └─spell
+│  │              └─js
+│  │                  ├─ad
+│  │                  ├─amdin
+│  │                  ├─board
+│  │                  ├─chatting
+│  │                  ├─common
+│  │                  ├─my-page
+│  │                  ├─point
+│  │                  ├─review
+│  │                  └─user
+│  │                      └─history
+│  └─tmp
+│      └─compileJava
+│          └─compileTransaction
+│              ├─annotation-output
+│              │  └─site
+│              │      └─woulduduo
+│              │          └─entity
+│              ├─compile-output
+│              │  └─site
+│              │      └─woulduduo
+│              │          ├─api
+│              │          ├─config
+│              │          ├─controller
+│              │          ├─dto
+│              │          │  ├─request
+│              │          │  │  ├─accuse
+│              │          │  │  ├─board
+│              │          │  │  └─page
+│              │          │  ├─response
+│              │          │  │  ├─accuse
+│              │          │  │  ├─board
+│              │          │  │  ├─chatting
+│              │          │  │  ├─login
+│              │          │  │  └─user
+│              │          │  └─riot
+│              │          ├─entity
+│              │          ├─exception
+│              │          ├─interceptor
+│              │          ├─repository
+│              │          ├─service
+│              │          └─util
+│              ├─header-output
+│              └─stash-dir
+├─gradle
+│  └─wrapper
+├─readme-assets
+└─src
+    ├─main
+    │  ├─java
+    │  │  └─site
+    │  │      └─woulduduo
+    │  │          ├─api
+    │  │          ├─aws
+    │  │          ├─config
+    │  │          ├─controller
+    │  │          ├─dto
+    │  │          │  ├─request
+    │  │          │  │  ├─accuse
+    │  │          │  │  ├─board
+    │  │          │  │  ├─chatting
+    │  │          │  │  ├─login
+    │  │          │  │  ├─matching
+    │  │          │  │  ├─page
+    │  │          │  │  ├─profile
+    │  │          │  │  └─user
+    │  │          │  ├─response
+    │  │          │  │  ├─accuse
+    │  │          │  │  ├─ad
+    │  │          │  │  ├─board
+    │  │          │  │  ├─chatting
+    │  │          │  │  ├─login
+    │  │          │  │  ├─page
+    │  │          │  │  ├─profile
+    │  │          │  │  └─user
+    │  │          │  └─riot
+    │  │          ├─entity
+    │  │          ├─enumeration
+    │  │          ├─exception
+    │  │          ├─interceptor
+    │  │          ├─repository
+    │  │          ├─service
+    │  │          └─util
+    │  │              └─upload
+    │  ├─resources
+    │  │  └─static
+    │  │      └─assets
+    │  │          ├─css
+    │  │          │  ├─ad
+    │  │          │  ├─admin
+    │  │          │  ├─board
+    │  │          │  ├─chatting
+    │  │          │  ├─common
+    │  │          │  ├─error
+    │  │          │  ├─my-page
+    │  │          │  ├─point
+    │  │          │  ├─review
+    │  │          │  └─user
+    │  │          │      └─history
+    │  │          ├─img
+    │  │          │  ├─admin
+    │  │          │  ├─chattingModal
+    │  │          │  ├─community
+    │  │          │  ├─header
+    │  │          │  ├─main
+    │  │          │  ├─mypage
+    │  │          │  ├─pointStation
+    │  │          │  ├─sign-up
+    │  │          │  └─user-history
+    │  │          │      ├─champions
+    │  │          │      ├─item
+    │  │          │      ├─rune
+    │  │          │      │  ├─main
+    │  │          │      │  └─sub
+    │  │          │      └─spell
+    │  │          └─js
+    │  │              ├─ad
+    │  │              ├─amdin
+    │  │              ├─board
+    │  │              ├─chatting
+    │  │              ├─common
+    │  │              ├─my-page
+    │  │              ├─point
+    │  │              ├─review
+    │  │              └─user
+    │  │                  └─history
+    │  └─webapp
+    │      └─WEB-INF
+    │          └─views
+    │              ├─ad
+    │              ├─admin
+    │              ├─board
+    │              ├─chatting
+    │              ├─common
+    │              ├─error
+    │              ├─my-page
+    │              ├─point
+    │              └─user
+    └─test
+        └─java
+            └─site
+                └─woulduduo
+                    └─service
+
+```

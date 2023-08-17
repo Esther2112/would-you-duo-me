@@ -28,10 +28,10 @@ import {makeChattingRoom} from "../../chatting/chatting-modal.js";
     const $reviewSection = document.getElementById('review-section');
 
     scrollPaging($reviewSection, renderReview, {
-            $wrapper: $reviewWrapper,
-            userAccount: userAccount,
-            pageNo: increasePageNo
-        });
+        $wrapper: $reviewWrapper,
+        userAccount: userAccount,
+        pageNo: increasePageNo
+    });
 
 
     // 로그인 했을때만 실행되는 함수
@@ -42,5 +42,22 @@ import {makeChattingRoom} from "../../chatting/chatting-modal.js";
         // 팔로우 이벤트 등록
         followEventHandler(userAccount, document.getElementById('user-follow-heart'));
     }
+
+    // 전적 갱신 버튼 이벤트 등록
+    document.getElementById('refresh-btn').onclick = async e => {
+        const userAccount = e.target.closest('#history-wrapper').dataset.userAccount;
+
+        const response = await fetch(`/api/v1/users/refresh/${userAccount}`,
+            {
+                method: 'PATCH'
+            }
+        );
+
+        const result = await response.json();
+
+        if (result) {
+            window.location.reload();
+        }
+    };
 
 })();
